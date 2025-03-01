@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Doan2FixCSDL.Models.Recipe>
+
+@{
+    ViewBag.Title = "User Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Css/Dashboard.css" rel="stylesheet" />
+<link href="~/Content/Css/DashboadUser.css" rel="stylesheet" />
+<h2 class="dashboard-header">Danh sách công thức của bạn</h2>
+@foreach (var recipe in Model.Where(r => r.IsApproved.GetValueOrDefault()))
+{
+    <div class="post-card" onclick="viewRecipeDetails(@recipe.RecipeID)">
+        <div class="post-header">
+            <h3 class="post-title">@recipe.Title</h3>
+            <div class="dropdown">
+                <button class="dropbtn" onclick="event.stopPropagation(); toggleDropdown(this)">⋮</button>
+                <div class="dropdown-content">
+                    <a href="@Url.Action("Edit", "Recipes", new { id = recipe.RecipeID })" class="edit">Sửa</a>
+                    <a href="@Url.Action("Delete", "Dashboard", new { id = recipe.RecipeID })" class="delete">Xóa</a>
+                </div>
+            </div>
+        </div>
+        <div class="post-content">
+            <p>@recipe.MoTa</p>
+            @if (!string.IsNullOrEmpty(recipe.HinhAnh))
+            {
+                <img src="~/Uploads/MainImages/@recipe.HinhAnh" alt="@recipe.Title" />
+            }
+        </div>
+        <span class="post-date">Ngày tạo: @(recipe.CreatedDate.HasValue ? recipe.CreatedDate.Value.ToShortDateString() : "Unknown")</span>
+    </div>
+}
+
+<script>
+    function viewRecipeDetails(id) {
+        location.href = '@Url.Action("Details", "Recipes")/' + id;
+    }
+
+    function toggleDropdown(button) {
+        const dropdownContent = button.nextElementSibling;
+        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            const dropdowns = document.getElementsByClassName("dropdown-content");
+            for (let i = 0; i < dropdowns.length; i++) {
+                const openDropdown = dropdowns[i];
+                if (openDropdown.style.display === 'block') {
+                    openDropdown.style.display = 'none';
+                }
+            }
+        }
+    }
+</script>

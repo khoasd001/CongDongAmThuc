@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Signup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Css/StyleSignup-in.css" rel="stylesheet" />
+
+<h3>ĐĂNG KÝ THÀNH VIÊN</h3>
+@if (!string.IsNullOrEmpty(ViewBag.Thongbao))
+{
+    <p class="error-message">@ViewBag.Thongbao</p>
+}
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    <input type="text" name="HoTen" placeholder="Họ và tên khách hàng"
+           required minlength="3" maxlength="50" />
+    <span class="text-danger">@ViewData["Loi1"]</span>
+
+    <input type="text" name="Useraname" placeholder="Tên đăng nhập"
+           required minlength="5" maxlength="20" />
+    <span class="text-danger">@ViewData["Loi2"]</span>
+
+    <input type="password" name="PasswordHash" placeholder="Mật khẩu"
+           required minlength="6" maxlength="50" />
+    <span class="text-danger">@ViewData["Loi3"]</span>
+
+    <input type="password" name="Matkhaunhaplai" placeholder="Mật khẩu nhập lại"
+           required minlength="6" maxlength="50" />
+    <span class="text-danger">@ViewData["Loi4"]</span>
+
+    <input type="email" name="Email" placeholder="Email"
+           required pattern="[a-z0-9._%+-]+[a-z0-9.-]+\.[a-z]{2,}$" />
+    <span class="text-danger">@ViewData["Loi5"]</span>
+
+    <input type="date" name="Ngaysinh" required max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+
+    <input type="submit" value="Đăng ký" />
+}

@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Dangnhap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Css/StyleSignup-in.css" rel="stylesheet" />
+
+<h3>ĐĂNG NHẬP</h3>
+@if (!string.IsNullOrEmpty(ViewBag.Thongbao))
+{
+    <p class="error-message">@ViewBag.Thongbao</p>
+}
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <input type="text" name="Useraname" placeholder="Tên đăng nhập" />
+    @ViewData["PasswordHash"]
+    <input type="password" name="PasswordHash" placeholder="Mật khẩu" />
+    @ViewData["Loi2"]
+    <input type="submit" value="Đăng nhập" />
+}

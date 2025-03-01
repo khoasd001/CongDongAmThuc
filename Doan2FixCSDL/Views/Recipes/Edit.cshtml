@@ -1,0 +1,152 @@
+﻿@model Doan2FixCSDL.Models.Recipe
+@{
+    ViewBag.Title = "Chỉnh sửa công thức";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/Css/EditRecipe.css" rel="stylesheet" />
+
+<div class="container">
+    <h2 class="text-center">Chỉnh sửa công thức</h2>
+
+    @using (Html.BeginForm("Edit", "Recipes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+        @Html.HiddenFor(m => m.RecipeID)
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control", @placeholder = "Nhập tên công thức" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.MoTa, new { @class = "form-label" })
+            @Html.TextAreaFor(m => m.MoTa, new { @class = "form-control", @placeholder = "Nhập mô tả công thức", @rows = 5 })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.CategoryID, "Chuyên mục", new { @class = "form-label" })
+            @Html.DropDownList("CategoryID", (SelectList)ViewBag.Categories, "Chọn chuyên mục", new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.Label("Ảnh bìa hiện tại", new { @class = "form-label" })
+            @if (!string.IsNullOrEmpty(Model.HinhAnh))
+            {
+                <div class="image-preview">
+                    <img src="~/Uploads/MainImages/@Model.HinhAnh" alt="Ảnh bìa hiện tại" class="img-thumbnail" />
+                </div>
+            }
+        </div>
+        <h3 class="steps-header">Các bước thực hiện:</h3>
+        <div id="steps-container">
+            @if (ViewBag.RecipeDetails != null)
+            {
+                for (int i = 0; i < ViewBag.RecipeDetails.Count; i++)
+                {
+                    <div class="step-item">
+                        <div class="form-group">
+                            <label for="stepsDescriptions" class="form-label">Mô tả bước</label>
+                            <textarea name="stepsDescriptions" class="form-control">@ViewBag.RecipeDetails[i].MoTa</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="stepsImages" class="form-label">Ảnh bước</label>
+                            @if (!string.IsNullOrEmpty(ViewBag.RecipeDetails[i].HinhAnh))
+                            {
+                                var images = ViewBag.RecipeDetails[i].HinhAnh.Split(';');
+                                foreach (var image in images)
+                                {
+                                    <div class="image-preview">
+                                        <img src="~/Uploads/StepImages/@image" alt="Ảnh bước @i" class="img-thumbnail" />
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="form-group mt-4">
+            <input type="submit" value="Cập nhật công thức" class="btn btn-primary" />
+        </div>
+    }
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f4f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .steps-header {
+        font-size: 1.2em;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .step-item {
+        background-color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 15px;
+    }
+
+    .image-preview {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .img-thumbnail {
+        max-width: 150px; /* Giới hạn chiều rộng hình ảnh */
+        height: auto; /* Đảm bảo tỷ lệ khung hình */
+        border-radius: 5px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+    }
+
+    .img-thumbnail-fixed {
+        width: 150px; /* Chiều rộng cố định */
+        height: 150px; /* Chiều cao cố định */
+        object-fit: cover; /* Cắt hình ảnh vừa với khung */
+        border-radius: 5px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+    }
+
+</style>

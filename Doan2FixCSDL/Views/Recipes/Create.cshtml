@@ -1,0 +1,320 @@
+﻿@model Doan2FixCSDL.Models.Recipe
+@{
+    ViewBag.Title = "Tạo công thức mới";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center text-primary mb-5">Tạo công thức mới</h2>
+
+@using (Html.BeginForm("Create", "Recipes", FormMethod.Post, new { enctype = "multipart/form-data", id = "recipe-form" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Title, "Tên món ăn:", new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.Title, new { @class = "form-control custom-input", placeholder = "Nhập tên công thức", required = "required", data_val = "true", data_val_required = "Tên công thức không được để trống" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.MoTa,"Nguyên liệu gồm:", new { @class = "form-label" })
+                @Html.TextAreaFor(m => m.MoTa, new { @class = "form-control custom-input", placeholder = "Mô tả công thức", rows = 4, required = "required", data_val = "true", data_val_required = "Mô tả không được để trống" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.CategoryID, "Danh mục món ăn:", new { @class = "form-label" })
+                @Html.DropDownList("CategoryID", (SelectList)ViewBag.Categories, "Chọn chuyên mục", new { @class = "form-control custom-input", required = "required", data_val = "true", data_val_required = "Chuyên mục không được để trống" })
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Ảnh món ăn thành phẩm", new { @class = "form-label" })
+                <input type="file" name="mainImage" class="form-control-file custom-file-input" required="required" data_val="true" data_val_required="Ảnh bìa không được để trống" />
+                <div id="main-image-preview" class="mt-2"></div> <!-- Preview container for main image -->
+            </div>
+
+            <h3 class="mt-4 mb-3">Các bước thực hiện:</h3>
+            <div id="steps-container">
+                <div class="step-item">
+                    <div class="form-group">
+                        <label for="stepsDescriptions" class="form-label">Mô tả bước:</label>
+                        <textarea name="stepsDescriptions" class="form-control custom-input" placeholder="Mô tả chi tiết bước thực hiện" required="required" data_val="true" data_val_required="Mô tả bước không được để trống"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="stepsImages" class="form-label">Hình ảnh của bước:</label>
+                        <input type="file" name="stepsImages[0]" class="form-control-file custom-file-input" multiple required="required" data_val="true" data_val_required="Ảnh bước không được để trống" />
+                        <div id="step-image-preview-0" class="mt-2"></div> <!-- Preview container for step 0 image -->
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-outline-primary mt-3" onclick="addStep()">Thêm bước</button>
+
+            <div class="form-group mt-4">
+                <input style="margin-top:10px;" type="submit" value="Tạo công thức" class="btn btn-primary w-100 custom-btn" id="submit-btn" disabled onclick="showAlert(event)" />
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    // Function to display image previews for step images
+    function setupStepImagePreview(fileInput, index) {
+        fileInput.addEventListener('change', function (event) {
+            var files = event.target.files;
+            var previewContainer = document.getElementById('step-image-preview-' + index);
+
+            // Clear previous previews
+            previewContainer.innerHTML = '';
+
+            // Loop through all selected files and create a preview for each
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = "Step Image Preview";
+                    img.classList.add('img-fluid', 'rounded');
+                    img.style.maxHeight = '150px';
+                    img.style.objectFit = 'cover';
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Function to display image preview for main image
+    document.querySelector('input[name="mainImage"]').addEventListener('change', function (event) {
+        var fileInput = event.target;
+        var file = fileInput.files[0];
+        var previewContainer = document.getElementById('main-image-preview');
+
+        // Create image preview if there's a file selected
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                previewContainer.innerHTML = `<img src="${e.target.result}" alt="Image Preview" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">`;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewContainer.innerHTML = '';
+        }
+    });
+
+    // Initialize event listeners for all existing step file inputs
+    document.querySelectorAll('input[name^="stepsImages"]').forEach(function (fileInput, index) {
+        setupStepImagePreview(fileInput, index);
+    });
+
+    function addStep() {
+        var stepIndex = document.querySelectorAll('.step-item').length;
+        var container = document.getElementById('steps-container');
+        var newStep = document.createElement('div');
+        newStep.classList.add('step-item');
+        newStep.innerHTML = `
+    <div class="form-group">
+        <label for="stepsDescriptions" class="form-label">Mô tả bước</label>
+        <textarea name="stepsDescriptions" class="form-control custom-input" placeholder="Mô tả chi tiết bước thực hiện" required="required" data_val="true" data_val_required="Mô tả bước không được để trống"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="stepsImages" class="form-label">Ảnh bước</label>
+        <input type="file" name="stepsImages[${stepIndex}]" class="form-control-file custom-file-input" multiple required="required" data_val="true" data_val_required="Ảnh bước không được để trống" />
+        <div id="step-image-preview-${stepIndex}" class="mt-2"></div> <!-- Preview container for step ${stepIndex} image -->
+    </div>
+    <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeStep(this)">Xóa bước</button>`; // Delete button
+
+        container.appendChild(newStep);
+
+        // Rebind the event listener to the new file input
+        var newFileInput = newStep.querySelector('input[name^="stepsImages"]');
+        setupStepImagePreview(newFileInput, stepIndex);
+
+        // Revalidate the form after adding a step
+        validateForm();
+    }
+
+    // Function to remove a step
+    function removeStep(button) {
+        var stepItem = button.closest('.step-item');
+        stepItem.remove(); // Remove the step item
+        validateForm(); // Revalidate the form after removing a step
+    }
+
+
+    function showAlert(event) {
+        // Prevent form submission
+        event.preventDefault();
+
+        // Display the alert message
+        alert("Bài viết của bạn đang xét duyệt!");
+
+        // Submit the form after the alert
+        setTimeout(function () {
+            document.querySelector('form').submit();
+        }, 1000); // Delay form submission by 1 second after the alert
+    }
+
+    function validateForm() {
+        var form = document.getElementById('recipe-form');
+        var submitBtn = document.getElementById('submit-btn');
+        var isValid = form.checkValidity(); // Check if all required fields are filled out
+
+        // Enable or disable the submit button based on form validity
+        submitBtn.disabled = !isValid;
+    }
+
+    // Add event listeners to validate the form on user input
+    document.getElementById('recipe-form').addEventListener('input', validateForm);
+
+    // Validate on page load to check initial form state
+    window.onload = validateForm;
+
+</script>
+
+<style>
+    /* Label Styling */
+    .form-group label {
+        font-weight: bold;
+        color: #333;
+        font-size: 1rem;
+    }
+
+    /* Custom Input Fields */
+    .form-control, .form-control-file {
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 12px;
+        width: 100%; /* Ensure full width */
+        transition: all 0.3s ease;
+    }
+
+    /* Make sure text area and file input are responsive */
+    .form-control {
+        width: 100%;
+    }
+
+        .form-control:focus, .form-control-file:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+            outline: none;
+        }
+
+    .custom-input {
+        background-color: #f9f9f9;
+    }
+
+    .custom-file-input {
+        background-color: #f0f0f0;
+    }
+
+    /* Button Styling */
+    .custom-btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 14px;
+        font-size: 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .custom-btn:hover {
+            background-color: #0056b3;
+            cursor: pointer;
+        }
+
+    /* Outline Button */
+    .btn-outline-primary {
+        border-radius: 8px;
+        border-color: #007bff;
+        color: #007bff;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+    /* Step Item Styling */
+    .step-item {
+        margin-bottom: 25px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .step-item .form-group {
+            margin-bottom: 20px;
+        }
+
+        .step-item .form-control {
+            padding: 12px;
+        }
+
+    /* Card Styling */
+    .card {
+        border-radius: 15px;
+        border: none;
+        background-color: #ffffff;
+        overflow: hidden;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    /* Headings */
+    h2, h3 {
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Alert Styling */
+    .alert-danger {
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    /* Image Preview Styling */
+    #main-image-preview img,
+    #step-image-preview-0 img,
+    #step-image-preview-1 img,
+    #step-image-preview-2 img {
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    /* Styling for the Delete Button */
+    .btn-danger {
+        background-color: #dc3545; /* Red background */
+        color: white; /* White text */
+        border: none; /* Remove border */
+        border-radius: 8px; /* Rounded corners */
+        padding: 8px 16px; /* Padding */
+        font-size: 14px; /* Font size */
+        transition: background-color 0.3s ease; /* Smooth background transition */
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333; /* Darker red on hover */
+            cursor: pointer; /* Change cursor to pointer */
+        }
+
+        .btn-danger:focus {
+            outline: none; /* Remove outline on focus */
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); /* Add shadow on focus */
+        }
+
+</style>

@@ -1,0 +1,203 @@
+﻿@using Doan2FixCSDL.Models
+@{
+    // Lấy danh sách người theo dõi từ ViewBag
+    List<User> followedUsers = ViewBag.FollowedUsers as List<User>;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yummy Hub</title>
+
+    <link href="~/Content/Css/Layout.css" rel="stylesheet" />
+    <link href="~/Content/Icon/fontawesome-free-6.6.0-web/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="~/Content/Css/hieuung.css" rel="stylesheet" />
+    <link href="~/Content/Css/snowfall.css" rel="stylesheet" />
+    <link href="~/Content/Css/darkmode.css" rel="stylesheet" />
+    <link href="~/Content/Css/loader.css" rel="stylesheet" />
+    <link href="~/Content/Css/notification.css" rel="stylesheet" />
+    <link href="~/Content/Css/follower-list.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+    <header>
+        <div class="logo">
+            <a href="@Url.Action("Index", "Home")" class="logo-link">
+                <img src="~/Content/Image/Logo.png" alt="Yummy Hub Logo" />
+                <span class="logo-text">YummyHub</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+                <li><a href="@Url.Action("Index", "Recipes")">Cộng đồng</a></li>
+                <li><a href="@Url.Action("About", "Home")">Giới thiệu</a></li>
+                <li class="hieu-ung-menu">
+                    <a href="#">Hiệu ứng</a>
+                    <div class="hieu-ung-dropdown">
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="toggle1" />
+                            <label for="toggle1">Dark mode <i class="fa-solid fa-moon"></i></label>
+                        </div>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="toggle2" />
+                            <label for="toggle2">Snow fall <i class="fa-solid fa-snowflake"></i></label>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            @if (Session["Taikhoan"] != null)
+            {
+                var user = (User)Session["Taikhoan"];
+
+                <div class="notification-icon">
+                    <i class="fa fa-bell" onclick="toggleNotificationOverlay(event)"></i>
+                    <!-- Notification Badge -->
+                    <div id="notification-badge" class="notification-badge" style="display: none;">0</div>
+                    <div id="notification-overlay" class="notification-overlay" style="display: none;">
+                        <!-- Nút đánh dấu đã đọc tất cả -->
+                        <button id="mark-all-read" class="mark-all-read-btn" onclick="markAllAsRead()">Đánh dấu đã đọc tất cả</button>
+
+                        <!-- Số lượng thông báo chưa đọc -->
+                        <div id="notification-count" class="notification-count" style="display: none;">0</div>
+
+                        <!-- Danh sách thông báo -->
+                        <ul id="notification-list">
+                            @if (ViewBag.Notifications != null)
+                            {
+                                foreach (var notification in (List<Notification>)ViewBag.Notifications)
+                                {
+                                    <li class="notification-item">@notification.Message</li>
+                                }
+                            }
+                            else
+                            {
+                                <li>Không có thông báo nào cả</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+
+
+                <span class="welcome-message">Chào bạn, @user.HoTen!</span>
+                <div class="user-avatar">
+                    <img src="~/Uploads/@(user.Avatar ?? "default-avatar.png")" alt="Avatar" onclick="toggleOverlay(event)" />
+                    <div id="user-overlay" class="overlay" style="display: none;">
+                        <ul>
+                            <li><a href="@Url.Action("EditProfile", "Dashboard")">Chỉnh sửa thông tin cá nhân</a></li>
+                            <li><a href="@Url.Action("Index", "Dashboard")">Công thức của tôi</a></li>
+                            <li><a href="@Url.Action("Create", "Recipes")">Đăng Công Thức</a></li>
+                            <li><a href="@Url.Action("Dangxuat", "User")">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a href="@Url.Action("Dangnhap", "User")" class="login-btn">Đăng nhập</a>
+                <a href="@Url.Action("Signup", "User")" class="signup-btn">Đăng ký</a>
+            }
+        </div>
+    </header>
+    <div id="dark-overlay" class="dark-overlay" onclick="hideOverlay()"></div>
+    <!-- Form người theo dõi -->
+    <section id="follower-list" class="follower-list" style="display: @((Session["Taikhoan"] == null) ? "none" : "block")">
+        @if (Session["Taikhoan"] != null)
+        {
+            <h2>Người bạn theo dõi</h2>
+            <ul>
+                @if (followedUsers != null && followedUsers.Any())
+                {
+                    foreach (var user in followedUsers)
+                    {
+                        <li>
+                            <img src="~/Uploads/@(user.Avatar ?? "default-avatar.png")" alt="Follower Avatar" class="follower-avatar" />
+                            <a style="text-decoration:none; color:white;text-transform:capitalize;" href="@Url.Action("UserRecipes", "Recipes", new { userId = user.UserID })" class="user-name">@user.Username</a>
+                            <form action="@Url.Action("UnfollowUser", "Recipes")" method="post" style="display:inline;">
+                                <input type="hidden" name="followedId" value="@user.UserID" />
+                                <input type="hidden" name="returnUrl" value="@Request.RawUrl" />
+                                <button type="submit" class="unfollow-button">
+                                    <i class="fa fa-times"></i> <!-- Biểu tượng  X xóa -->
+                                </button>
+                            </form>
+                        </li>
+                    }
+
+                }
+                else
+                {
+                    <li>Bạn chưa theo dõi ai.</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Vui lòng đăng nhập để xem danh sách người theo dõi.</p>
+        }
+    </section>
+    <main>
+        @RenderBody()
+    </main>
+    <footer>
+        <div class="footer-about">
+            <h2>Về Yummy Hub</h2>
+            <p>
+                Sứ mệnh của Yummy Hub là làm cho việc vào bếp vui hơn mỗi ngày, vì chúng tôi tin rằng nấu nướng là chìa khóa
+                cho một cuộc sống hạnh phúc và khỏe mạnh hơn cho con người, cộng đồng, và hành tinh này. Chúng tôi muốn hỗ trợ các đầu bếp
+                gia đình trên toàn thế giới để họ có thể giúp đỡ nhau qua việc chia sẻ các món ngon và kinh nghiệm nấu ăn của mình.
+                <br><br>
+                <a href="#">Đăng ký gói Premium</a> để truy cập các chức năng và quyền lợi dành riêng khác!
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+<style>
+</style>
+<script>
+    function toggleOverlay(e) {
+        var overlay = document.getElementById('user-overlay');
+        var darkOverlay = document.getElementById('dark-overlay');
+        if (overlay.style.display === 'none') {
+            overlay.style.display = 'block';
+            darkOverlay.style.display = 'block';
+        } else {
+            overlay.style.display = 'none';
+            darkOverlay.style.display = 'none';
+        }
+        e.stopPropagation();
+    }
+
+    function hideOverlay() {
+        var overlay = document.getElementById('user-overlay');
+        var darkOverlay = document.getElementById('dark-overlay');
+        overlay.style.display = 'none';
+        darkOverlay.style.display = 'none';
+    }
+
+    window.onclick = function (e) {
+        var overlay = document.getElementById('user-overlay');
+        var darkOverlay = document.getElementById('dark-overlay');
+        if (!e.target.matches('.user-avatar img')) {
+            if (overlay && overlay.style.display === 'block') {
+                overlay.style.display = 'none';
+                darkOverlay.style.display = 'none';
+            }
+        }
+    }
+
+</script>
+
+<script src="~/Content/Js/snowfall.js"></script>
+<script src="~/Content/Js/darkmode.js"></script>
+<script src="~/Content/Js/loader.js"></script>
+<script src="~/Content/Js/notification.js"></script>

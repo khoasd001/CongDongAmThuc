@@ -1,0 +1,222 @@
+﻿@model Doan2FixCSDL.Models.User
+
+@{
+    ViewBag.Title = "Chỉnh sửa thông tin cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="edit-profile-container">
+    <h2 class="page-title">Chỉnh sửa thông tin cá nhân</h2>
+
+    @using (Html.BeginForm("EditProfile", "Dashboard", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.UserID)
+
+        <div class="form-group avatar-group">
+            <div>
+                <img style="width:100px;" src="~/Uploads/@(string.IsNullOrEmpty(Model.Avatar) ? "default-avatar.png" : Model.Avatar)" alt="Avatar hiện tại" class="img-thumbnail avatar-preview" onclick="toggleAvatarOverlay(event)" />
+            </div>
+
+            <input type="file" name="avatar" id="fileInput" class="form-control-file" style="display:none;" />
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.HoTen)
+            @Html.TextBoxFor(model => model.HoTen, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ngaysinh)
+            @Html.TextBoxFor(model => model.Ngaysinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email)
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <button type="submit" class="btn btn-primary save-button">Lưu thay đổi</button>
+
+        @* Thêm nút đổi mật khẩu *@
+        <button style="margin-top:10px;" type="button" class="btn btn-secondary change-password-button" onclick="location.href='@Url.Action("ChangePassword", "Dashboard")'">Đổi mật khẩu</button>
+    }
+</div>
+
+<div id="avatar-overlay" class="avatar-overlay" onclick="hideAvatarOverlay()">
+    <div class="avatar-overlay-content">
+        <img src="~/Uploads/@(string.IsNullOrEmpty(Model.Avatar) ? "default-avatar.png" : Model.Avatar)" alt="Avatar hiện tại" class="img-thumbnail" width="300" />
+        <button type="button" class="btn btn-primary change-avatar-button" onclick="document.getElementById('fileInput').click();">Thay đổi ảnh</button>
+    </div>
+</div>
+
+<div id="dark-overlay" class="dark-overlay" onclick="hideAvatarOverlay()"></div>
+
+<script>
+    function toggleAvatarOverlay(e) {
+        var avatarOverlay = document.getElementById('avatar-overlay');
+        var darkOverlay = document.getElementById('dark-overlay');
+        if (avatarOverlay.style.display === 'none') {
+            avatarOverlay.style.display = 'block';
+            darkOverlay.style.display = 'block';
+        } else {
+            avatarOverlay.style.display = 'none';
+            darkOverlay.style.display = 'none';
+        }
+        e.stopPropagation();
+    }
+
+    function hideAvatarOverlay() {
+        var avatarOverlay = document.getElementById('avatar-overlay');
+        var darkOverlay = document.getElementById('dark-overlay');
+        avatarOverlay.style.display = 'none';
+        darkOverlay.style.display = 'none';
+    }
+
+    window.onload = function () {
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                alert('@TempData["SuccessMessage"]');
+            </text>
+        }
+    };
+</script>
+
+<style>
+    /* Định dạng cho trang EditProfile */
+    .page-title {
+        font-family: 'Quicksand', sans-serif;
+        font-size: 2rem;
+        color: #ff7043;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .edit-profile-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        width: 100%;
+    }
+
+    .avatar-group {
+        text-align: center;
+    }
+
+    .avatar-preview {
+        display: block;
+        margin: 0 auto 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.3s;
+        border: 1px solid black;
+        border-spacing: 5px;
+    }
+
+        .avatar-preview:hover {
+            transform: scale(1.05);
+        }
+
+    button.btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    button.btn-primary {
+        background-color: #ff7043;
+        color: #fff;
+        border: none;
+    }
+
+        button.btn-primary:hover {
+            background-color: #ff8c00;
+            transform: scale(1.05);
+        }
+
+    button.btn-secondary {
+        background-color: #ccc;
+        color: #333;
+        border: none;
+    }
+
+        button.btn-secondary:hover {
+            background-color: #bbb;
+            transform: scale(1.05);
+        }
+
+    .dark-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 900;
+    }
+
+    .avatar-overlay {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        z-index: 1000;
+        text-align: center;
+    }
+
+    .avatar-overlay-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .avatar-overlay-content img {
+            margin-bottom: 15px;
+            border-radius: 50%;
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .avatar-overlay-content .btn {
+            margin-top: 10px;
+            width: auto;
+            padding: 10px 20px;
+        }
+    .form-control[readonly] {
+        background-color: #e0e0e0; /* Màu nền xám nhạt */
+        color: #6c757d; /* Màu chữ tối hơn để phù hợp */
+        cursor: not-allowed; /* Con trỏ chuột đổi thành dấu cấm */
+        border-color: #d6d6d6; /* Đường viền xám nhạt */
+        box-shadow: none; /* Loại bỏ hiệu ứng đổ bóng */
+    }
+</style>

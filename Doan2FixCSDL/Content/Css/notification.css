@@ -1,0 +1,119 @@
+/* Notification Icon */
+.notification-icon {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.notification-icon .fa-bell {
+    font-size: 28px;
+    color: #fff;
+    transition: transform 0.3s ease-in-out;
+}
+
+.notification-icon:hover .fa-bell {
+    transform: scale(1.1); /* Slight hover effect */
+}
+
+/* Notification Overlay */
+.notification-overlay {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow for depth */
+    padding: 20px;
+    border-radius: 12px;
+    z-index: 1000;
+    display: none;
+    width: 320px;
+    height: auto;
+    max-height: 400px;
+    overflow-y: auto; /* Allow scrolling if content exceeds height */
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification-overlay ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.notification-overlay ul li {
+    margin: 15px 0;
+    font-weight: 500;
+    color: #555;
+    padding-left: 15px; /* Remove the previous icon space */
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+/* Blur unread notifications */
+.notification-overlay ul li.unread {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px); /* Apply blur to unread notifications */
+    border-radius: 8px;
+    padding-left: 15px;
+}
+
+
+/* Notification Badge */
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff7043;
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border: 2px solid #fff;
+    display: none; /* Initially hidden */
+}
+
+
+/* Mark all as read button */
+.mark-all-read-btn {
+    background-color: #ff7043;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto 15px auto;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+    .mark-all-read-btn:hover {
+        background-color: #e64a19;
+    }
+
+/* Hover effect for notification items */
+.notification-overlay ul li:hover {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding-left: 15px;
+}
+
+/* Animation for sliding in the notification panel */
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,80 @@
+﻿.follower-list {
+    position: fixed; /* Cố định vị trí để luôn hiển thị khi cuộn trang */
+    top: 100px; /* Đặt vị trí dưới khu vực đăng nhập */
+    right: 0px;
+    margin: 10px;
+    padding: 30px; /* Tăng padding để biểu mẫu rộng hơn */
+    background-color: #555; /* Màu nền xám đậm hơn */
+    border: 1px solid #ccc; /* Viền sáng nhẹ */
+    border-radius: 8px; /* Bo góc hộp */
+    max-width: 600px; /* Tăng kích thước tối đa của hộp */
+    text-align: center; /* Canh giữa nội dung */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    z-index: 10; /* Đảm bảo luôn nằm trên các phần tử khác */
+    overflow-y: auto; /* Cho phép cuộn trong trường hợp nội dung tràn */
+    color: #fff; /* Màu chữ trắng để tương phản */
+}
+
+    .follower-list h2 {
+        font-family: 'Quicksand', sans-serif;
+        color: #fff; /* Màu trắng cho tiêu đề */
+        font-size: 22px; /* Kích thước chữ */
+        margin-bottom: 15px; /* Khoảng cách dưới tiêu đề */
+    }
+
+    .follower-list ul {
+        list-style: none; /* Loại bỏ ký hiệu danh sách */
+        margin: 0;
+        padding: 0;
+    }
+
+        .follower-list ul li {
+            display: flex; /* Hiển thị nội dung theo hàng ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            margin-bottom: 15px; /* Khoảng cách giữa các mục */
+            position: relative; /* Dùng để định vị icon "X" trong từng mục */
+        }
+
+.follower-avatar {
+    width: 37px; /* Chiều rộng ảnh đại diện */
+    height: 37px; /* Chiều cao ảnh đại diện */
+    border-radius: 50%; /* Làm tròn ảnh thành hình tròn */
+    margin-right: 15px; /* Khoảng cách giữa ảnh và tên */
+    border: 2px solid #ddd; /* Viền sáng quanh ảnh */
+}
+
+.follower-list form .unfollow-button {
+    background-color: transparent; /* Loại bỏ nền */
+    color: #fff; /* Màu mặc định của biểu tượng */
+    border: none; /* Loại bỏ viền */
+    padding: 0; /* Loại bỏ padding */
+    font-size: 20px; /* Kích thước biểu tượng */
+    cursor: pointer; /* Con trỏ chuột thay đổi thành tay khi di chuột qua */
+    position: absolute; /* Định vị trong từng mục danh sách */
+    right: -5px; /* Canh phải gần ảnh đại diện */
+    top: 50%; /* Canh giữa theo chiều dọc */
+    transform: translateY(-50%); /* Tinh chỉnh căn giữa dọc */
+    transition: color 0.3s ease, transform 0.2s ease; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+    .follower-list form .unfollow-button:hover {
+        color: #e74c3c; /* Đổi màu biểu tượng thành đỏ khi di chuột */
+        transform: translateY(-50%) scale(1.1); /* Tăng kích thước biểu tượng nhẹ khi di chuột */
+    }
+
+    .follower-list form .unfollow-button:focus {
+        outline: none; /* Loại bỏ viền mặc định khi focus */
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.6); /* Hiệu ứng đổ bóng nhẹ khi focus */
+    }
+
+.follower-list .user-name {
+    color: #fff; /* Màu mặc định */
+    text-decoration: none; /* Loại bỏ gạch chân */
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+    .follower-list .user-name:hover {
+        color: #1abc9c; /* Màu xanh lục nhạt khi di chuột */
+        text-shadow: 0 0 5px rgba(26, 188, 156, 0.8); /* Hiệu ứng ánh sáng */
+        font-weight: bold; /* Tăng độ đậm của chữ */
+    }

@@ -1,0 +1,65 @@
+﻿@model Doan2FixCSDL.Models.User
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Xem người dùng";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Thông tin người dùng</h1>
+
+    <!-- Card hiển thị thông tin người dùng -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">@Model.Username</h5>
+            <p class="card-text"><strong>Email:</strong> @Model.Email</p>
+            <p class="card-text"><strong>Họ tên:</strong> @Model.HoTen</p>
+            <p class="card-text"><strong>Ngày sinh:</strong> @(Model.Ngaysinh.HasValue ? Model.Ngaysinh.Value.ToShortDateString() : "N/A")</p>
+        </div>
+    </div>
+
+    <!-- Nút quay lại -->
+    <a href="@Url.Action("ManageUsers", "Admin")" class="btn btn-secondary">Quay lại</a>
+</div>
+<style>
+    /* Card styling */
+    .card {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Card title styling */
+    .card-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* Card text styling */
+    .card-text {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    /* Button styling */
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        text-align: center;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    /* Thêm khoảng cách dưới thẻ h1 */
+    h1 {
+        font-size: 2.5rem;
+        color: #333;
+    }
+
+</style>

@@ -1,0 +1,206 @@
+﻿@model Doan2FixCSDL.Models.Recipe
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Chỉnh sửa công thức";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Chỉnh sửa công thức</h1>
+
+    @using (Html.BeginForm("EditRecipeDetails", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.RecipeID)
+
+        <div class="form-group">
+            <label for="Title">Tên công thức</label>
+            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "Nhập tên công thức" })
+        </div>
+
+        <div class="form-group">
+            <label for="CategoryID">Danh mục</label>
+            @Html.DropDownListFor(model => model.CategoryID, ViewBag.Categories as SelectList, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label for="MoTa">Mô tả</label>
+            @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control", rows = 5, placeholder = "Nhập mô tả công thức" })
+        </div>
+
+        <div class="form-group">
+            <label for="MainImage">Ảnh bìa</label>
+            <input type="file" name="mainImage" class="form-control" />
+            @if (!string.IsNullOrEmpty(Model.HinhAnh))
+            {
+                <img src="~/Uploads/MainImages/@Model.HinhAnh" alt="Ảnh bìa" class="img-fluid mt-2 rounded shadow-sm" />
+            }
+        </div>
+
+        <h2 class="mt-4">Chi tiết các bước</h2>
+        for (int i = 0; i < Model.RecipeDetails.Count; i++)
+        {
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h3>Bước @(i + 1)</h3>
+                    @Html.HiddenFor(model => model.RecipeDetails[i].DetailID)
+                    <div class="form-group">
+                        <label for="stepsDescriptions">Mô tả bước</label>
+                        <textarea name="stepsDescriptions[@i]" class="form-control" rows="3">@Model.RecipeDetails[i].MoTa</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="stepsImages">Hình ảnh bước</label>
+                        <input type="file" name="stepsImages[@i]" multiple class="form-control" />
+                        @if (!string.IsNullOrEmpty(Model.RecipeDetails[i].HinhAnh))
+                        {
+                            <img src="~/Uploads/StepImages/@Model.RecipeDetails[i].HinhAnh" alt="Hình ảnh bước" class="img-fluid mt-2 rounded shadow-sm" />
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    }
+</div>
+<style>
+    .container {
+        max-width: 900px;
+        margin-top: 30px;
+    }
+
+    /* Tiêu đề chính */
+    h1 {
+        color: #1d3557; /* Màu tiêu đề chính */
+        font-weight: 600;
+    }
+
+    /* Tiêu đề phụ */
+    h2 {
+        color: #333333;
+        margin-top: 30px;
+        font-weight: 500;
+    }
+
+    /* Form và các input */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #1d3557; /* Màu border khi focus */
+            box-shadow: 0 0 5px rgba(29, 53, 87, 0.5);
+        }
+
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    input[type="file"].form-control {
+        padding: 5px;
+    }
+
+    input[type="file"]:focus {
+        outline: none;
+    }
+
+    /* Card */
+    .card {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1d3557;
+    }
+
+    /* Nút bấm */
+    button[type="submit"] {
+        background-color: #28a745; /* Màu xanh cho nút phê duyệt */
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+    /* Hình ảnh */
+    img.img-fluid {
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 10px;
+    }
+
+    /* Placeholder */
+    input::placeholder,
+    textarea::placeholder {
+        color: #6c757d;
+        opacity: 1;
+    }
+
+    /* Các chỉnh sửa nhỏ */
+    .mb-4 {
+        margin-bottom: 30px;
+    }
+
+    .mt-4 {
+        margin-top: 30px;
+    }
+
+    .mt-2 {
+        margin-top: 10px;
+    }
+
+    .rounded {
+        border-radius: 8px;
+    }
+
+    /* Cải tiến giao diện cho từng bước */
+    .card.shadow-sm {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body h3 {
+        font-size: 18px;
+        font-weight: 500;
+        color: #1d3557;
+    }
+
+    .card-body textarea.form-control {
+        background-color: #f8f9fa;
+        border: 1px solid #ccc;
+    }
+
+    input[type="file"].form-control {
+        background-color: #f8f9fa;
+    }
+
+    /* Đảm bảo các card không quá sát nhau */
+    .mb-4 {
+        margin-bottom: 25px;
+    }
+
+</style>

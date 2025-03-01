@@ -1,0 +1,87 @@
+﻿@model Doan2FixCSDL.Models.Recipe
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Chi tiết công thức";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">@Model.Title</h1>
+
+    <!-- Hình ảnh công thức -->
+    @if (Model.HinhAnh != null)
+    {
+        <img src="~/Uploads/MainImages/@Model.HinhAnh" alt="Hình ảnh công thức" class="img-fluid mb-4 rounded shadow-sm" />
+    }
+
+    <!-- Thông tin công thức -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <p><strong>Danh mục:</strong> @(Model.Category != null ? Model.Category.CategoryName : "Không có danh mục")</p>
+            <p><strong>Người tạo:</strong> @ViewBag.CreatorUsername</p>
+            <p><strong>Ngày tạo:</strong> @(Model.CreatedDate.HasValue ? Model.CreatedDate.Value.ToShortDateString() : "N/A")</p>
+            <p><strong>Mô tả:</strong> @Model.MoTa</p>
+        </div>
+    </div>
+
+    <!-- Chi tiết các bước -->
+    <h2 class="mt-4">Chi tiết các bước</h2>
+    @foreach (var detail in Model.RecipeDetails)
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3>Bước @detail.StepNumber</h3>
+                <p>@detail.MoTa</p>
+                @if (!string.IsNullOrEmpty(detail.HinhAnh))
+                {
+                    <img src="~/Uploads/StepImages/@detail.HinhAnh" alt="Hình ảnh bước" class="img-fluid mt-2 rounded shadow-sm" />
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    /* Card styling */
+    .card {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Các phần thông tin trong công thức */
+    .card-body p {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    /* Hình ảnh công thức và bước */
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .mb-4 {
+        margin-bottom: 20px;
+    }
+
+    .mt-2 {
+        margin-top: 10px;
+    }
+
+    /* Phần tiêu đề */
+    h1, h2, h3 {
+        font-weight: bold;
+        color: #333;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-top: 20px;
+    }
+</style>

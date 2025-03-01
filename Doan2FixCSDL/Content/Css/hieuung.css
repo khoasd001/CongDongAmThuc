@@ -1,0 +1,157 @@
+body {
+    background-color: #d1d1d1;
+    color: #333;
+}
+
+main {
+    background: linear-gradient(180deg, #d1d1d1, #ffddc1 100%);
+}
+
+.welcome-message {
+    font-weight: bold;
+    font-size: large;
+    margin-right: 15px;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-text {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 24px;
+    color: #fff;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.user-avatar {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+    .user-avatar img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: solid black 2px;
+    }
+
+.dark-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+}
+
+.overlay {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    background-size: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    display: none;
+    width: 300px;
+    height: 400px;
+}
+
+    .overlay ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .overlay ul li {
+            margin: 30px 0;
+        }
+
+            .overlay ul li a {
+                color: #333;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+.hieu-ung-menu {
+    position: relative;
+}
+
+.hieu-ung-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: rgba(128, 128, 128, 0.6);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    width: 200px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.hieu-ung-menu:hover .hieu-ung-dropdown {
+    display: block;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toggle-switch {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.toggle-switch input[type="checkbox"] {
+    width: 40px;
+    height: 20px;
+    appearance: none;
+    background: #ddd;
+    border-radius: 20px;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.toggle-switch input[type="checkbox"]:checked {
+    background: #ff7043;
+}
+
+.toggle-switch input[type="checkbox"]:before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggle-switch input[type="checkbox"]:checked:before {
+    transform: translateX(20px);
+}
+
+.toggle-switch label {
+    margin-left: 10px;
+}

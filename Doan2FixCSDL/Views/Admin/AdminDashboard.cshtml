@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Dashboard Quản trị Yummy Hub</h1>
+    <p class="text-muted">Tổng quan các số liệu quan trọng trong hệ thống.</p>
+
+    <!-- Thẻ thống kê -->
+    <div class="row">
+        <!-- Card Người Dùng -->
+        <div class="col-md-4">
+            <div class="card border-primary shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-users fa-3x text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-primary">Người dùng:</h6>
+                            <h4 style="margin-left:10px;">@ViewBag.UserCount</h4>
+                        </div>
+                    </div>
+                    <a href="@Url.Action("ManageUsers", "Admin")" class="btn btn-outline-primary btn-sm mt-3">Quản lý người dùng</a>
+                </div>
+            </div>
+        </div>
+        <!-- Card Công Thức -->
+        <div class="col-md-4">
+            <div class="card border-success shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-utensils fa-3x text-success"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-success">Công thức:</h6>
+                            <h4 style="margin-left:10px;">@ViewBag.RecipeCount</h4>
+                        </div>
+                    </div>
+                    <a href="@Url.Action("ManageRecipes", "Admin")" class="btn btn-outline-success btn-sm mt-3">Quản lý công thức</a>
+                </div>
+            </div>
+        </div>
+        <!-- Card Bình Luận -->
+        <div class="col-md-4">
+            <div class="card border-warning shadow h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-comments fa-3x text-warning"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-warning">Bình luận:</h6>
+                            <h4 style="margin-left:10px;">@ViewBag.CommentCount</h4>
+                        </div>
+                    </div>
+                    <a href="@Url.Action("ManageComments", "Admin")" class="btn btn-outline-warning btn-sm mt-3">Quản lý bình luận</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

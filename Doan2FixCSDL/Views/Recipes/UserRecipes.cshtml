@@ -1,0 +1,167 @@
+﻿@model IPagedList<Doan2FixCSDL.Models.Recipe>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Công thức của người dùng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Danh sách công thức </h2>
+
+<div class="recipe-list-container">
+    <div class="recipe-list">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var recipe in Model)
+            {
+                <a href="@Url.Action("Details", "Recipes", new { id = recipe.RecipeID })" class="recipe-item" data-category="@recipe.CategoryID">
+                    <img src="~/Uploads/MainImages/@recipe.HinhAnh" alt="@recipe.Title" class="recipe-image" />
+                    <div class="recipe-content">
+                        <h3>@recipe.Title</h3>
+                        <p>@recipe.MoTa</p>
+                    </div>
+                </a>
+            }
+        }
+        else
+        {
+            <p>Không có công thức nào.</p>
+        }
+    </div>
+</div>
+
+<div class="pagination-container">
+    @Html.PagedListPager(
+        Model,
+        page => Url.Action("UserRecipes", new { userId = ViewBag.User.UserID, page }),
+        new PagedListRenderOptions
+        {
+            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            DisplayLinkToIndividualPages = true,
+            MaximumPageNumbersToDisplay = 5
+        }
+    )
+</div>
+
+<style>
+    .recipe-list-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .recipe-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Thêm dòng này để căn giữa các công thức */
+        gap: 20px;
+        flex: 1;
+        max-width: 900px;
+        width: 100%;
+    }
+
+    .recipe-item {
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Đảm bảo nội dung bên trong căn giữa */
+        width: 700px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .recipe-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 20px;
+    }
+
+    .recipe-content {
+        flex: 1;
+        text-align: center; /* Thêm dòng này để nội dung chữ căn giữa */
+    }
+
+
+        .recipe-content h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #333;
+            text-transform: capitalize;
+        }
+
+        .recipe-content p {
+            margin: 0;
+            color: #666;
+        }
+
+    /* Phân trang */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+        .pagination-container .pagination {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .pagination-container .pagination li {
+                display: inline-block;
+            }
+
+            .pagination-container .pagination a,
+            .pagination-container .pagination span {
+                display: block;
+                padding: 10px 15px;
+                background-color: #f9f9f9;
+                color: #333;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                text-decoration: none;
+                font-size: 16px;
+                transition: background-color 0.3s, transform 0.2s;
+            }
+
+                .pagination-container .pagination a:hover,
+                .pagination-container .pagination span.active {
+                    background-color: #007bff;
+                    color: white;
+                    transform: scale(1.1);
+                }
+
+            .pagination-container .pagination .disabled {
+                color: #ccc;
+                pointer-events: none;
+                background-color: #f1f1f1;
+            }
+
+            .pagination-container .pagination .previous,
+            .pagination-container .pagination .next {
+                font-weight: bold;
+            }
+
+            .pagination-container .pagination .first,
+            .pagination-container .pagination .last {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+</style>

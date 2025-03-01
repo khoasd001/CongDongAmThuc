@@ -1,0 +1,225 @@
+/* Đặt lại phong cách chung */
+/* Adjusted background color */
+body {
+    font-family: 'Nunito', sans-serif; /* Or 'Quicksand', sans-serif */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #d1d1d1; /* Slightly darker shade */
+    color: #333;
+}
+main {
+    background: linear-gradient(180deg, #d1d1d1, #ffddc1 100%);
+}
+h1, h2, h3{
+    font-family: 'Quicksand', sans-serif; /* Font mềm mại hơn cho tiêu đề */
+    font-weight: 600;
+    font-size: 2.5rem;
+    color: #ff7043;
+}
+/*---------------------------------------------------------------------------*/
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff6f43f4;
+    padding: 20px 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo a img {
+    height: 70px;
+    border-radius:50px;
+    transition: transform 0.3s;
+}
+
+header .logo a img:hover {
+    transform: scale(1.1); /* Hiệu ứng phóng to nhẹ khi di chuột */
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    position: relative;
+}
+
+nav ul li a:hover {
+    color: #ffddc1; /* Hiệu ứng khi di chuột */
+}
+
+/* Hiệu ứng dưới mỗi liên kết */
+nav ul li a::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width .3s;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.auth-buttons a {
+    background-color: white;
+    color: #ff7043;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.auth-buttons a:hover {
+    background-color: #ff6f43;
+    color: white;
+    transform: scale(1.05); /* Tăng nhẹ kích thước khi di chuột */
+}
+
+/*---------------------------------------------------------------------------*/
+/* Main Content */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    background: linear-gradient(180deg, #fff, #ffddc1 100%);
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng */
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    border-radius: 8px;
+}
+
+.search-bar button {
+    background-color: #ffa500;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: #ff8c00;
+    transform: translateY(-2px);
+}
+
+.recipe-card {
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Đổ bóng mạnh hơn */
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.recipe-card:hover {
+    transform: scale(1.03); /* Phóng to nhẹ khi di chuột */
+}
+
+.recipe-content h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #ff7043;
+}
+
+.recipe-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/*---------------------------------------------------------*/
+/* Footer */
+footer {
+    background-color: #ff7043;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #fff;
+}
+
+.footer-about, .footer-community, .footer-links {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    padding-top: 20px;
+}
+
+.footer-about h2 {
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.footer-about a {
+    color: #ffddc1;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-about a:hover {
+    color: #fff;
+}
+
+.footer-links a, .footer-community a {
+    color: #ffddc1;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover, .footer-community a:hover {
+    color: #fff;
+}
+

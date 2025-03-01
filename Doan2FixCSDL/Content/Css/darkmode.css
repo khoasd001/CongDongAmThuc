@@ -1,0 +1,42 @@
+﻿/* Dark mode overlay */
+.dark-mode-overlay {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* Less dark, semi-transparent black */
+    z-index: 900; /* Ensure it's below other elements that need to be interactive */
+    pointer-events: none; /* Allows clicks to pass through */
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #000;
+    color: #fff;
+}
+
+header.dark-mode, footer.dark-mode {
+    background-color: #000;
+    color: #fff;
+}
+
+    header.dark-mode a, footer.dark-mode a {
+        color: #fff;
+    }
+
+nav.dark-mode ul li a {
+    color: #fff;
+}
+
+.auth-buttons a.dark-mode {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+/* Dark mode for "Hiệu ứng" section */
+.hieu-ung-menu.dark-mode, .hieu-ung-menu.dark-mode a, .hieu-ung-menu.dark-mode .toggle-switch label {
+    color: #fff;
+}

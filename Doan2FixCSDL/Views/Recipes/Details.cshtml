@@ -1,0 +1,153 @@
+﻿@model Doan2FixCSDL.Models.Recipe
+@using Doan2FixCSDL.Models
+@{
+    ViewBag.Title = "Chi tiết công thức";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Css/Recipe-detail.css" rel="stylesheet" />
+<div class="recipe-detail">
+    <div class="recipe-header">
+        <h2 class="recipe-title">@Model.Title.ToUpper()</h2>
+        @if (!string.IsNullOrEmpty(Model.HinhAnh))
+        {
+            <div class="recipe-cover">
+                <img src="~/Uploads/MainImages/@Model.HinhAnh" alt="@Model.Title" class="cover-image" />
+            </div>
+        }
+        <p class="recipe-description">@Model.MoTa</p>
+    </div>
+
+    <h3>Các bước thực hiện:</h3>
+    <form class="recipe-steps-form">
+        @foreach (var step in Model.RecipeDetails)
+        {
+            <div class="recipe-step">
+                <h4 class="step-title">Bước @step.StepNumber</h4>
+                <p class="step-description">@step.MoTa</p>
+                @if (!string.IsNullOrEmpty(step.HinhAnh))
+                {
+                    <div class="step-images">
+                        @foreach (var image in step.HinhAnh.Split(';'))
+                        {
+                            <img src="~/Uploads/StepImages/@image" alt="Bước @step.StepNumber" class="step-large-thumbnail" />
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </form>
+
+    <h3>Tác giả:</h3>
+    @if (Model.User != null)
+    {
+        <div class="author-section">
+            <img src="~/Uploads/@(Model.User.Avatar ?? "default-avatar.png")" alt="Avatar của @Model.User.HoTen" class="author-avatar" />
+            <span class="author-name">
+                <a style="text-decoration:none;text-transform:capitalize;" href="@Url.Action("UserRecipes", "Recipes", new { userId = Model.User.UserID })">@Model.User.HoTen</a>
+            </span>
+            @if (Session["Taikhoan"] != null)
+            {
+                var isFollowing = ViewBag.FollowedUsers != null && ((List<User>)ViewBag.FollowedUsers).Any(u => u.UserID == Model.User.UserID);
+
+                if (isFollowing)
+                {
+                    <form action="@Url.Action("UnfollowUser", "Recipes")" method="post" style="display:inline;">
+                        <input type="hidden" name="followedId" value="@Model.User.UserID" />
+                        <input type="hidden" name="returnUrl" value="@Url.Action("Details", "Recipes", new { id = Model.RecipeID })" />
+                        <button type="submit" class="follow-button following">Bỏ theo dõi -</button> <!-- Nút khi đã theo dõi -->
+                    </form>
+                }
+                else
+                {
+                    <form action="@Url.Action("FollowUser", "Recipes")" method="post" style="display:inline;">
+                        <input type="hidden" name="followedId" value="@Model.User.UserID" />
+                        <input type="hidden" name="recipeId" value="@Model.RecipeID" />
+                        <input type="hidden" name="returnUrl" value="@Url.Action("Details", "Recipes", new { id = Model.RecipeID })" />
+                        <button type="submit" class="follow-button">Theo dõi +</button> <!-- Nút khi chưa theo dõi -->
+                    </form>
+                }
+            }
+            else
+            {
+
+                <span>Đăng nhập để theo dõi</span>
+            }
+
+        </div>
+    }
+    <!-- Add Like Button Section -->
+    <h3>Lượt thích:</h3>
+    <div class="like-section">
+        <form action="@Url.Action("Like", "Recipes")" method="post">
+            @Html.HiddenFor(m => m.RecipeID)
+            <button type="submit" class="like-button">Thích</button>
+        </form>
+        <span>@ViewBag.LikeCount lượt thích</span>
+    </div>
+
+    <h3>Bình luận:</h3>
+    <div class="comments-section">
+        <form action="@Url.Action("Comment", "Recipes")" method="post" enctype="multipart/form-data" class="comment-form">
+            @Html.HiddenFor(m => m.RecipeID)
+            <textarea name="commentText" placeholder="Viết bình luận của bạn..." required></textarea>
+            <input type="file" name="commentImage" accept="image/*" id="commentImage" />
+            <button type="submit">Gửi bình luận</button>
+        </form>
+
+        <div class="image-preview" id="imagePreview" style="display: none;">
+            <img id="previewImage" src="" alt="Preview" style="max-width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px;" />
+        </div>
+
+        <div class="comment-list">
+            @if (ViewBag.Comments is List<Doan2FixCSDL.Models.Comment> comments)
+            {
+                foreach (var comment in comments)
+                {
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <img src="~/Uploads/@((comment.User.Avatar != null) ? comment.User.Avatar : "default-avatar.png")" alt="Avatar của @comment.User.Username" class="comment-avatar" />
+                            <div class="comment-info">
+                                <span class="comment-username">@comment.User.Username</span>
+                                <span class="comment-date">
+                                    @(comment.CommentDate.HasValue ? comment.CommentDate.Value.ToString("dd/MM/yyyy HH:mm") : "Không xác định")
+                                </span>
+                            </div>
+                        </div>
+                        <div class="comment-content">
+                            <p class="comment-text">@comment.CommentText</p>
+                            @if (!string.IsNullOrEmpty(comment.HinhAnh))
+                            {
+                                <div class="comment-image">
+                                    <img src="~/Uploads/CommentImages/@comment.HinhAnh" alt="Bình luận của @comment.User.Username" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Không có bình luận nào.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('commentImage').addEventListener('change', function (event) {
+        var preview = document.getElementById('imagePreview');
+        var previewImage = document.getElementById('previewImage');
+        var file = event.target.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+        }
+    });
+</script>

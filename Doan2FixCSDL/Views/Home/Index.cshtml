@@ -1,0 +1,354 @@
+﻿@model IPagedList<Doan2FixCSDL.Models.Recipe>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<main>
+    <div class="main-container">
+        <section class="main-slider">
+            <div class="slider">
+                <div class="list">
+                    <div class="item">
+                        <img src="~/Content/Image/Slideshow1.jpeg" alt="" style="border-radius:5px;">
+                    </div>
+                    <div class="item">
+                        <img src="~/Content/Image/Slideshow2.jpeg" alt="" style="border-radius:5px;">
+                    </div>
+                    <div class="item">
+                        <img src="~/Content/Image/Slideshow3.jpeg" alt="" style="border-radius:5px;">
+                    </div>
+                    <div class="item">
+                        <img src="~/Content/Image/Slideshow4.jpeg" alt="" style="border-radius:5px;">
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button id="previous"><</button>
+                    <button id="next">></button>
+                </div>
+                <ul class="dots">
+                    <li class="active"></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <div class="search-section">
+        <div class="logo">
+            <img style="border-radius: 50px; height: 70px;" src="~/Content/Image/Logo.png" alt="Cookpad Logo" class="logo" />
+            <h1>Yummy Hub</h1>
+        </div>
+        <div class="search-bar">
+            @using (Html.BeginForm("Search", "Recipes", FormMethod.Get))
+            {
+                <input type="text" name="query" placeholder="Gõ vào tên các món ăn..." class="search-input" />
+                <button type="submit" class="search-button">
+                    <i class="fa fa-search"></i>
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="recipe-list">
+        @if (ViewBag.SearchResults != null)
+        {
+            foreach (var recipe in ViewBag.SearchResults as List<Doan2FixCSDL.Models.Recipe>)
+            {
+                <div class="recipe-item">
+                    <h3>@recipe.Title</h3>
+                    <p>@recipe.MoTa</p>
+                    <a href="@Url.Action("Details", "Recipe", new { id = recipe.RecipeID })">Xem chi tiết</a>
+                </div>
+            }
+        }
+        else if (Model != null)
+        {
+            foreach (var recipe in Model)
+            {
+                <a href="@Url.Action("Details", "Recipes", new { id = recipe.RecipeID })" class="recipe-item">
+                    <img src="~/Uploads/MainImages/@recipe.HinhAnh" alt="@recipe.Title" class="recipe-image" />
+                    <div class="recipe-content">
+                        <h3>@recipe.Title</h3>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+
+    <div class="top-recipes">
+        <h3>Top 3 Công Thức Yêu Thích</h3>
+        @if (ViewBag.TopRecipes != null && ((List<Doan2FixCSDL.Models.Recipe>)ViewBag.TopRecipes).Count > 0)
+        {
+            <div class="top-1-recipe">
+                <a href="@Url.Action("Details", "Recipes", new { id = ViewBag.TopRecipes[0].RecipeID })" class="recipe-item rank1">
+                    <div class="recipe-image-container">
+                        <img src="~/Uploads/MainImages/@ViewBag.TopRecipes[0].HinhAnh" alt="@ViewBag.TopRecipes[0].Title" class="recipe-image" />
+                    </div>
+                    <div class="recipe-title">
+                        <h3 style="color:white">@ViewBag.TopRecipes[0].Title</h3>
+                    </div>
+                </a>
+            </div>
+            <div class="top-2-3-recipes">
+                <a href="@Url.Action("Details", "Recipes", new { id = ViewBag.TopRecipes[1].RecipeID })" class="recipe-item rank2">
+                    <div class="recipe-image-container">
+                        <img src="~/Uploads/MainImages/@ViewBag.TopRecipes[1].HinhAnh" alt="@ViewBag.TopRecipes[1].Title" class="recipe-image" />
+                    </div>
+                    <div class="recipe-title">
+                        <h3 style="color:white">@ViewBag.TopRecipes[1].Title</h3>
+                    </div>
+                </a>
+                <a href="@Url.Action("Details", "Recipes", new { id = ViewBag.TopRecipes[2].RecipeID })" class="recipe-item rank3">
+                    <div class="recipe-image-container">
+                        <img src="~/Uploads/MainImages/@ViewBag.TopRecipes[2].HinhAnh" alt="@ViewBag.TopRecipes[2].Title" class="recipe-image" />
+                    </div>
+                    <div class="recipe-title">
+                        <h3 style="color:white">@ViewBag.TopRecipes[2].Title</h3>
+                    </div>
+                </a>
+            </div>
+        }
+        else
+        {
+            <p>Không có bài viết nào.</p>
+        }
+    </div>
+
+</main>
+
+<link href="~/Content/Css/slideshow.css" rel="stylesheet" />
+<script src="~/Content/Js/slideshow.js"></script>
+<style>
+    .search-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 50px 20px;
+        gap: 20px;
+    }
+
+    .search-section .logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .search-section .logo img {
+        border-radius: 50px;
+        height: 100px;
+        transition: transform 0.3s ease;
+    }
+
+    .search-section .logo img:hover {
+        transform: scale(1.1);
+    }
+
+    .search-section h1 {
+        font-size: 2.5rem;
+        color: #ff7043;
+        margin: 0;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .search-bar {
+        display: flex;
+        background-color: white;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 600px;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .search-bar:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-bar input {
+        border: none;
+        outline: none;
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 8px;
+        width: 520px;
+    }
+
+    .search-bar button {
+        background-color: #ff7043;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        float: right;
+    }
+
+    .search-bar button:hover {
+        background-color: #ff5733;
+        transform: translateY(-2px);
+    }
+
+    .recipe-list {
+        margin-top: 20px;
+    }
+
+    .recipe-item {
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .recipe-item h3 {
+        margin: 0;
+    }
+
+    .recipe-item p {
+        margin: 5px 0;
+    }
+
+    /* CSS cho Top 1 */
+    .recipe-item.rank1 .recipe-image-container {
+        background-image: url('../../content/image/frame1.png');
+        background-size: cover;
+        background-repeat: no-repeat; /* Đảm bảo rằng hình ảnh khung không bị lặp */
+        position: relative; /* Cần thiết để định vị ảnh con bên trong */
+        width:200px; /* Điều chỉnh kích thước cho phù hợp với khung */
+        height: 200px;
+        padding-bottom:20px;
+    }
+
+    .recipe-item.rank1 .recipe-image {
+        border-radius:50%;
+        position: absolute; /* Đặt hình ảnh ở giữa khung */
+        top: 71%; /* Điều chỉnh vị trí để căn giữa */
+        left: 50%;
+        width: 68px; /* Điều chỉnh kích thước để vừa với khung */
+        height: 68px;
+        transform: translate(-50%, -50%); /* Dùng để căn giữa chính xác */
+        object-fit: cover; /* Đảm bảo hình ảnh được căn đều trong khung */
+    }
+
+    /* CSS cho Top 2 */
+    .recipe-item.rank2 .recipe-image-container {
+        background-image: url('../../content/image/frame2.png');
+        background-size: cover;
+        background-repeat: no-repeat; /* Đảm bảo rằng hình ảnh khung không bị lặp */
+        position: relative; /* Cần thiết để định vị ảnh con bên trong */
+        width: 200px; /* Điều chỉnh kích thước cho phù hợp với khung */
+        height: 200px;
+        padding-bottom: 20px;
+    }
+
+    .recipe-item.rank2 .recipe-image {
+        border-radius: 50%;
+        position: absolute; /* Đặt hình ảnh ở giữa khung */
+        top: 71%; /* Điều chỉnh vị trí để căn giữa */
+        left: 50%;
+        width: 68px; /* Điều chỉnh kích thước để vừa với khung */
+        height: 68px;
+        transform: translate(-50%, -50%); /* Dùng để căn giữa chính xác */
+        object-fit: cover; /* Đảm bảo hình ảnh được căn đều trong khung */
+    }
+
+    /* CSS cho Top 3 */
+    .recipe-item.rank3 .recipe-image-container {
+        background-image: url('../../content/image/frane3.png');
+        background-size: cover;
+        background-repeat: no-repeat; /* Đảm bảo rằng hình ảnh khung không bị lặp */
+        position: relative; /* Cần thiết để định vị ảnh con bên trong */
+        width: 200px; /* Điều chỉnh kích thước cho phù hợp với khung */
+        height: 200px;
+        padding-bottom: 20px;
+    }
+
+    .recipe-item.rank3 .recipe-image {
+        border-radius: 50%;
+        position: absolute; /* Đặt hình ảnh ở giữa khung */
+        top: 71%; /* Điều chỉnh vị trí để căn giữa */
+        left: 50%;
+        width: 68px; /* Điều chỉnh kích thước để vừa với khung */
+        height: 68px;
+        transform: translate(-50%, -50%); /* Dùng để căn giữa chính xác */
+        object-fit: cover; /* Đảm bảo hình ảnh được căn đều trong khung */
+    }
+
+
+    /* General adjustments for the recipe title */
+    .recipe-title h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    /* Container and alignment for top recipes */
+    .top-recipes {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+        gap: 20px;
+    }
+
+    .top-recipes h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+
+    .top-recipes .top-1-recipe {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .top-recipes .top-2-3-recipes {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .top-recipes .recipe-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        text-align: center;
+        width: 200px; /* Adjusted width for better visibility */
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+        position: relative;
+        text-decoration: none;
+        text-transform: capitalize;
+        /* Galaxy-inspired gradient background */
+        background: linear-gradient(135deg, #2c3e50, #6a1b9a, #8e44ad); /* Dark blue to purple gradient */
+        border-radius: 12px; /* Rounded corners */
+        padding: 20px; /* Ample padding for spacing */
+        /* Adding subtle box shadow for a floating effect */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Light shadow around text for better readability */
+    }
+
+    .top-recipes .recipe-item:hover {
+        opacity: 1;
+        /* Enhance box shadow on hover for more emphasis */
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, #8e44ad, #6a1b9a); /* Slightly lighter gradient on hover */
+        transform: scale(1.05); /* Slight scaling effect to make it stand out */
+    }
+</style>

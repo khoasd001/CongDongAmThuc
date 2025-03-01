@@ -1,0 +1,63 @@
+﻿@model Doan2FixCSDL.Models.Comment
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Chi tiết bình luận";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Chi tiết bình luận</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <p class="card-text">
+                <i class="fas fa-user"></i> <strong>Người bình luận:</strong> @ViewBag.Username
+            </p>
+            <p class="card-text">
+                <i class="fas fa-calendar-alt"></i> <strong>Ngày bình luận:</strong> @Model.CommentDate
+            </p>
+            <p class="card-text">
+                <i class="fas fa-comment-dots"></i> <strong>Nội dung:</strong> @Model.CommentText
+            </p>
+
+            @if (!string.IsNullOrEmpty(Model.HinhAnh))
+            {
+                <div class="mt-3">
+                    <img src="~/Uploads/CommentImages/@Model.HinhAnh" alt="Hình ảnh bình luận" class="img-fluid rounded" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<style>
+
+    /* Card */
+    .card {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Phần tiêu đề */
+    .card-text {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+        .card-text i {
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+    /* Hình ảnh bình luận */
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .mt-3 {
+        margin-top: 15px;
+    }
+
+</style>

@@ -1,0 +1,26 @@
+@keyframes snowfall {
+    0% {
+        transform: translate(-50px, -100px);
+    }
+
+    50% {
+        transform: translate(50px, 50vh);
+    }
+
+    100% {
+        transform: translate(-50px, 100vh);
+    }
+}
+
+.snowflake {
+    position: fixed;
+    top: -10px;
+    width: 10px;
+    height: 10px;
+    background-color: #fff; /* Bright white color for snowflakes */
+    border-radius: 50%;
+    opacity: 0.9;
+    animation: snowfall 10s linear infinite;
+    z-index: 2000; /* Ensure snowflakes are on top */
+}
+

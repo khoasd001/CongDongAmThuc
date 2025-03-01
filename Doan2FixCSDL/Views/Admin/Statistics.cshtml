@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Statistics";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Thống kê Yummy Hub</h1>
+    <p class="text-muted">Tổng quan các số liệu quan trọng trong hệ thống quản lí.</p>
+
+    <!-- Canvas for Chart -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <canvas id="statisticsChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var ctx = document.getElementById('statisticsChart').getContext('2d');
+            var statisticsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Người dùng', 'Công thức', 'Bình luận', 'Tổng số lượt đăng nhập'], // Thêm mục "Total Login Count"
+                    datasets: [{
+                        label: 'Statistics',
+                        data: [
+                            @ViewBag.UserCount,
+                            @ViewBag.RecipeCount,
+                            @ViewBag.CommentCount,
+                            @ViewBag.TotalAccessCount // Dữ liệu số lần đăng nhập
+                        ],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.2)', // Blue for Users
+                            'rgba(75, 192, 192, 0.2)', // Green for Recipes
+                            'rgba(255, 206, 86, 0.2)',  // Yellow for Comments
+                            'rgba(255, 99, 132, 0.2)'   // Red for Total Login Count
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</div>

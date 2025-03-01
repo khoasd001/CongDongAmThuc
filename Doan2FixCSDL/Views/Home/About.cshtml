@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Giới thiệu về chúng tôi";
+    ViewBag.Message = "Khám phá Yummy Hub - Nơi kết nối những người yêu nấu nướng!";
+}
+<main aria-labelledby="title">
+    <section class="about-section">
+        <h2 id="title">@ViewBag.Title</h2>
+        <h3>@ViewBag.Message</h3>
+
+        <p>Yummy Hub được thành lập với sứ mệnh làm cho việc vào bếp trở nên thú vị hơn mỗi ngày. Chúng tôi tin rằng nấu nướng không chỉ là một kỹ năng cần thiết mà còn là một cách tuyệt vời để kết nối với người thân, chia sẻ niềm vui và gắn kết cộng đồng.</p>
+
+        <p>Với Yummy Hub, bạn có thể tìm kiếm vô số công thức nấu ăn đa dạng, chia sẻ những món ngon của mình, và kết nối với cộng đồng những người yêu ẩm thực trên khắp thế giới. Chúng tôi cam kết mang đến cho bạn trải nghiệm ẩm thực đầy cảm hứng và sáng tạo.</p>
+
+        <p>Hãy tham gia với chúng tôi để làm phong phú thêm mỗi bữa ăn và biến mỗi khoảnh khắc vào bếp thành niềm vui bất tận!</p>
+    </section>
+</main>
+<style>
+    /**** Trang About ****/
+    .about-section {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ tạo chiều sâu */
+        border-radius: 10px;
+        font-family: 'Nunito', sans-serif;
+    }
+
+        .about-section h2 {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.2rem;
+            color: #ff7043;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .about-section h3 {
+            font-size: 1.5rem;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .about-section p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+            .about-section p:last-child {
+                margin-bottom: 0; /* Xóa margin cuối cùng cho đoạn văn cuối */
+            }
+
+</style>
